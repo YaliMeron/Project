@@ -1,232 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="0dp">
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <TableLayout
-        android:layout_width="408dp"
-        android:layout_height="192dp"
-        android:layout_marginBottom="4dp"
+    <!-- First Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="2dp">
+        android:gravity="center">
+        <Button android:text="Q" style="@style/KeyboardButton" />
+        <Button android:text="W" style="@style/KeyboardButton" />
+        <Button android:text="E" style="@style/KeyboardButton" />
+        <Button android:text="R" style="@style/KeyboardButton" />
+        <Button android:text="T" style="@style/KeyboardButton" />
+        <Button android:text="Y" style="@style/KeyboardButton" />
+        <Button android:text="U" style="@style/KeyboardButton" />
+        <Button android:text="I" style="@style/KeyboardButton" />
+        <Button android:text="O" style="@style/KeyboardButton" />
+        <Button android:text="P" style="@style/KeyboardButton" />
+    </LinearLayout>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:layout_weight="1">
+    <!-- Second Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button android:text="A" style="@style/KeyboardButton" />
+        <Button android:text="S" style="@style/KeyboardButton" />
+        <Button android:text="D" style="@style/KeyboardButton" />
+        <Button android:text="F" style="@style/KeyboardButton" />
+        <Button android:text="G" style="@style/KeyboardButton" />
+        <Button android:text="H" style="@style/KeyboardButton" />
+        <Button android:text="J" style="@style/KeyboardButton" />
+        <Button android:text="K" style="@style/KeyboardButton" />
+        <Button android:text="L" style="@style/KeyboardButton" />
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/btnQ"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Q" />
+    <!-- Third Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
 
-            <Button
-                android:id="@+id/btnW"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="W" />
+        <Button
+            style="@style/KeyboardButton"
+            android:layout_width="56dp"
+            android:text="ENTER" />
 
-            <Button
-                android:id="@+id/btnE"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="E" />
-
-            <Button
-                android:id="@+id/btnR"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="R" />
-
-            <Button
-                android:id="@+id/btnT"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="T" />
-
-            <Button
-                android:id="@+id/btnY"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Y" />
-
-            <Button
-                android:id="@+id/btnU"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="U" />
-
-            <Button
-                android:id="@+id/button40"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button38"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/button48"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button47"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button46"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button45"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button44"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button43"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button42"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button40"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button38"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="372dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/button48"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button47"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button46"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button45"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button44"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button43"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button42"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button40"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-            <Button
-                android:id="@+id/button38"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
-
-        </TableRow>
-
-    </TableLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+        <Button android:text="Z" style="@style/KeyboardButton" />
+        <Button android:text="X" style="@style/KeyboardButton" />
+        <Button android:text="C" style="@style/KeyboardButton" />
+        <Button android:text="V" style="@style/KeyboardButton" />
+        <Button android:text="B" style="@style/KeyboardButton" />
+        <Button android:text="N" style="@style/KeyboardButton" />
+        <Button android:text="M" style="@style/KeyboardButton" />
+        <Button android:text="⌫" style="@style/KeyboardButton" />
+    </LinearLayout>
+</LinearLayout>
