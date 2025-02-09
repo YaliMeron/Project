@@ -17,51 +17,128 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-1dp"
+        android:background="@color/white"
         android:orientation="vertical"
-        android:padding="8dp"
-        android:background="@android:color/darker_gray">
+        android:padding="8dp">
 
         <!-- First Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <Button android:id="@+id/btnQ" android:text="Q" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnW" android:text="W" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnE" android:text="E" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnR" android:text="R" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnT" android:text="T" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnY" android:text="Y" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnU" android:text="U" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnI" android:text="I" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnO" android:text="O" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnP" android:text="P" style="@style/KeyboardButton" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnQ"
+                style="@style/KeyboardButton"
+                android:text="Q" />
+
+            <Button
+                android:id="@+id/btnW"
+                style="@style/KeyboardButton"
+                android:text="W" />
+
+            <Button
+                android:id="@+id/btnE"
+                style="@style/KeyboardButton"
+                android:text="E" />
+
+            <Button
+                android:id="@+id/btnR"
+                style="@style/KeyboardButton"
+                android:text="R" />
+
+            <Button
+                android:id="@+id/btnT"
+                style="@style/KeyboardButton"
+                android:text="T" />
+
+            <Button
+                android:id="@+id/btnY"
+                style="@style/KeyboardButton"
+                android:text="Y" />
+
+            <Button
+                android:id="@+id/btnU"
+                style="@style/KeyboardButton"
+                android:text="U" />
+
+            <Button
+                android:id="@+id/btnI"
+                style="@style/KeyboardButton"
+                android:text="I" />
+
+            <Button
+                android:id="@+id/btnO"
+                style="@style/KeyboardButton"
+                android:text="O" />
+
+            <Button
+                android:id="@+id/btnP"
+                style="@style/KeyboardButton"
+                android:text="P" />
         </LinearLayout>
 
         <!-- Second Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <Button android:id="@+id/btnA" android:text="A" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnS" android:text="S" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnD" android:text="D" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnF" android:text="F" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnG" android:text="G" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnH" android:text="H" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnJ" android:text="J" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnK" android:text="K" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnL" android:text="L" style="@style/KeyboardButton" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnA"
+                style="@style/KeyboardButton"
+                android:text="A" />
+
+            <Button
+                android:id="@+id/btnS"
+                style="@style/KeyboardButton"
+                android:text="S" />
+
+            <Button
+                android:id="@+id/btnD"
+                style="@style/KeyboardButton"
+                android:text="D" />
+
+            <Button
+                android:id="@+id/btnF"
+                style="@style/KeyboardButton"
+                android:text="F" />
+
+            <Button
+                android:id="@+id/btnG"
+                style="@style/KeyboardButton"
+                android:text="G" />
+
+            <Button
+                android:id="@+id/btnH"
+                style="@style/KeyboardButton"
+                android:text="H" />
+
+            <Button
+                android:id="@+id/btnJ"
+                style="@style/KeyboardButton"
+                android:text="J" />
+
+            <Button
+                android:id="@+id/btnK"
+                style="@style/KeyboardButton"
+                android:text="K" />
+
+            <Button
+                android:id="@+id/btnL"
+                style="@style/KeyboardButton"
+                android:text="L" />
         </LinearLayout>
 
         <!-- Third Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnEnter"
@@ -69,16 +146,242 @@
                 android:layout_width="56dp"
                 android:text="ENTER" />
 
-            <Button android:id="@+id/btnZ" android:text="Z" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnX" android:text="X" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnC" android:text="C" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnV" android:text="V" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnB" android:text="B" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnN" android:text="N" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnM" android:text="M" style="@style/KeyboardButton" />
-            <Button android:id="@+id/btnBackspace" android:text="⌫" style="@style/KeyboardButton" />
+            <Button
+                android:id="@+id/btnZ"
+                style="@style/KeyboardButton"
+                android:text="Z" />
+
+            <Button
+                android:id="@+id/btnX"
+                style="@style/KeyboardButton"
+                android:text="X" />
+
+            <Button
+                android:id="@+id/btnC"
+                style="@style/KeyboardButton"
+                android:text="C" />
+
+            <Button
+                android:id="@+id/btnV"
+                style="@style/KeyboardButton"
+                android:text="V" />
+
+            <Button
+                android:id="@+id/btnB"
+                style="@style/KeyboardButton"
+                android:text="B" />
+
+            <Button
+                android:id="@+id/btnN"
+                style="@style/KeyboardButton"
+                android:text="N" />
+
+            <Button
+                android:id="@+id/btnM"
+                style="@style/KeyboardButton"
+                android:text="M" />
+
+            <Button
+                android:id="@+id/btnBackspace"
+                style="@style/KeyboardButton"
+                android:text="⌫" />
         </LinearLayout>
 
     </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/wordleGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_centerInParent="true">
+
+        <!-- Rows for Wordle Grid -->
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tile_00"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_01"
+
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_02"
+
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_03"
+
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_04"
+
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tile_10"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_11"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_12"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_13"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_14"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tile_20"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_21"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_22"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_23"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_24"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tile_30"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_31"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_32"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_33"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_34"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tile_40"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_41"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_42"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_43"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_44"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tile_50"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_51"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_52"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_53"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+
+            <TextView
+                android:id="@+id/tile_54"
+                style="@style/WordleTile"
+                android:background="@drawable/wordle_tile_border" />
+        </TableRow>
+
+    </TableLayout>
 
 </RelativeLayout>
