@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private final String ANSWER = "WATER";
+    private final String ANSWER = "MESSI";
     private StringBuilder currentGuess = new StringBuilder();
     private int row = 0;
     private TextView[][] grid = new TextView[6][5];
