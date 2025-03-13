@@ -10,6 +10,7 @@ constraintlayout = "2.1.4"
 gridlayout = "1.0.0"
 
 [libraries]
+konfetti = { module = "nl.dionsegijn:konfetti-xml", version = "2.0.2" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

@@ -7,12 +7,11 @@ import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.ViewPropertyAnimator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private final String ANSWER = "WATER";
+    private String ANSWER = "WATER"; // Default, will be replaced by fetched word
     private StringBuilder currentGuess = new StringBuilder();
     private int row = 0;
     private TextView[][] grid = new TextView[6][5];
@@ -25,6 +24,21 @@ public class MainActivity extends AppCompatActivity {
 
         initializeGrid();
         initializeKeyboard();
+        fetchNewWord();
+    }
+
+    private void fetchNewWord() {
+        WordFetcher.fetchWord(new WordFetcher.WordFetchCallback() {
+            @Override
+            public void onWordFetched(String word) {
+                ANSWER = word;
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(MainActivity.this, "Failed to fetch word, using default", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initializeGrid() {
@@ -57,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
             grid[row][col].setText(String.valueOf(letter));
             currentGuess.append(letter);
 
-            // Pop animation
             grid[row][col].setScaleX(0.8f);
             grid[row][col].setScaleY(0.8f);
             grid[row][col].animate().scaleX(1f).scaleY(1f).setDuration(100).start();
@@ -83,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         boolean[] correct = new boolean[5];
         boolean[] used = new boolean[5];
 
-        // First pass: check for correct (green)
         for (int i = 0; i < 5; i++) {
             if (guess.charAt(i) == ANSWER.charAt(i)) {
                 correct[i] = true;
@@ -91,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Second pass: check for yellow
         for (int i = 0; i < 5; i++) {
             if (!correct[i]) {
                 for (int j = 0; j < 5; j++) {
@@ -103,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Animate flip for each tile
         for (int i = 0; i < 5; i++) {
             int color = Color.GRAY;
             char letter = guess.charAt(i);
@@ -127,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             }, i * 300);
         }
 
-        // Next row or end
         new Handler().postDelayed(() -> {
             if (guess.equals(ANSWER)) {
                 Toast.makeText(this, "You guessed it!", Toast.LENGTH_LONG).show();
@@ -139,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
                 disableAllButtons();
             }
-        }, 5 * 300 + 300); // after all flips
+        }, 5 * 300 + 300);
     }
 
     private void flipTile(TextView tile, char letter, int color, int delay) {
@@ -175,17 +184,11 @@ public class MainActivity extends AppCompatActivity {
                     currentColor = ((ColorDrawable) button.getBackground()).getColor();
                 }
 
-                // Prioritize stronger colors
                 if (currentColor == Color.GREEN) return;
                 if (currentColor == Color.YELLOW && newColor == Color.GRAY) return;
 
-                // Clear theme tint and apply color directly
                 button.setBackgroundTintList(null);
                 button.setBackgroundColor(newColor);
-
-                if (newColor == Color.GRAY) {
-                    button.setEnabled(false);
-                }
                 break;
             }
         }
