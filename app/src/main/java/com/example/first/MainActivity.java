@@ -1,6 +1,7 @@
 package com.example.first;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -72,59 +73,87 @@ public class MainActivity extends AppCompatActivity {
 
         String guess = currentGuess.toString();
         boolean[] correct = new boolean[5];
+        boolean[] used = new boolean[5];
+        boolean[] colored = new boolean[5];
 
+        // First pass: check correct (green)
         for (int i = 0; i < 5; i++) {
             if (guess.charAt(i) == ANSWER.charAt(i)) {
                 grid[row][i].setBackgroundColor(Color.GREEN);
+                updateKeyboardColor(guess.charAt(i), Color.GREEN);
                 correct[i] = true;
+                used[i] = true;
+                colored[i] = true;
             }
         }
 
+        // Second pass: check present (yellow)
         for (int i = 0; i < 5; i++) {
-            if (!correct[i] && ANSWER.contains(String.valueOf(guess.charAt(i)))) {
-                grid[row][i].setBackgroundColor(Color.YELLOW);
-            } else if (!correct[i]) {
+            if (!correct[i]) {
+                for (int j = 0; j < 5; j++) {
+                    if (!used[j] && guess.charAt(i) == ANSWER.charAt(j)) {
+                        grid[row][i].setBackgroundColor(Color.YELLOW);
+                        updateKeyboardColor(guess.charAt(i), Color.YELLOW);
+                        used[j] = true;
+                        colored[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Third pass: mark remaining as absent (gray)
+        for (int i = 0; i < 5; i++) {
+            if (!colored[i]) {
                 grid[row][i].setBackgroundColor(Color.GRAY);
-                disableButton(guess.charAt(i));
+                updateKeyboardColor(guess.charAt(i), Color.GRAY);
             }
         }
 
         if (guess.equals(ANSWER)) {
             Toast.makeText(this, "You guessed it!", Toast.LENGTH_LONG).show();
+            disableAllButtons();
         } else if (row < 5) {
             row++;
             currentGuess.setLength(0);
         } else {
             Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
+            disableAllButtons();
         }
     }
 
-    private void disableButton(char letter) {
+    private void updateKeyboardColor(char letter, int newColor) {
         for (Button button : keyboardButtons) {
-            if (button.getText().toString().equals(String.valueOf(letter))) {
-                button.setEnabled(false);
-                button.setBackgroundColor(Color.DKGRAY);
+            if (button != null && button.getText().toString().equals(String.valueOf(letter))) {
+                int currentColor = Color.TRANSPARENT;
+                if (button.getBackground() instanceof ColorDrawable) {
+                    currentColor = ((ColorDrawable) button.getBackground()).getColor();
+                }
+
+                // Prioritize stronger colors
+                if (currentColor == Color.GREEN) return;
+                if (currentColor == Color.YELLOW && newColor == Color.GRAY) return;
+
+                // Clear theme tint and apply color directly
+                button.setBackgroundTintList(null);
+                button.setBackgroundColor(newColor);
+
+                if (newColor == Color.GRAY) {
+                    button.setEnabled(false);
+                }
                 break;
             }
         }
     }
+
+
+    private void disableAllButtons() {
+        for (Button button : keyboardButtons) {
+            if (button != null) {
+                button.setEnabled(false);
+            }
+        }
+        findViewById(R.id.btnBackspace).setEnabled(false);
+        findViewById(R.id.btnEnter).setEnabled(false);
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
