@@ -3,15 +3,16 @@ package com.example.first;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.ViewPropertyAnimator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
-    private final String ANSWER = "STAGA";
+    private final String ANSWER = "WATER";
     private StringBuilder currentGuess = new StringBuilder();
     private int row = 0;
     private TextView[][] grid = new TextView[6][5];
@@ -55,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
             int col = currentGuess.length();
             grid[row][col].setText(String.valueOf(letter));
             currentGuess.append(letter);
+
+            // Pop animation
+            grid[row][col].setScaleX(0.8f);
+            grid[row][col].setScaleY(0.8f);
+            grid[row][col].animate().scaleX(1f).scaleY(1f).setDuration(100).start();
         }
     }
 
@@ -68,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkWord() {
         if (currentGuess.length() < 5) {
+            shakeRow(row);
             Toast.makeText(this, "Enter a 5-letter word", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -75,51 +82,88 @@ public class MainActivity extends AppCompatActivity {
         String guess = currentGuess.toString();
         boolean[] correct = new boolean[5];
         boolean[] used = new boolean[5];
-        boolean[] colored = new boolean[5];
 
-        // First pass: check correct (green)
+        // First pass: check for correct (green)
         for (int i = 0; i < 5; i++) {
             if (guess.charAt(i) == ANSWER.charAt(i)) {
-                grid[row][i].setBackgroundColor(Color.GREEN);
-                updateKeyboardColor(guess.charAt(i), Color.GREEN);
                 correct[i] = true;
                 used[i] = true;
-                colored[i] = true;
             }
         }
 
-        // Second pass: check present (yellow)
+        // Second pass: check for yellow
         for (int i = 0; i < 5; i++) {
             if (!correct[i]) {
                 for (int j = 0; j < 5; j++) {
                     if (!used[j] && guess.charAt(i) == ANSWER.charAt(j)) {
-                        grid[row][i].setBackgroundColor(Color.YELLOW);
-                        updateKeyboardColor(guess.charAt(i), Color.YELLOW);
                         used[j] = true;
-                        colored[i] = true;
                         break;
                     }
                 }
             }
         }
 
-        // Third pass: mark remaining as absent (gray)
+        // Animate flip for each tile
         for (int i = 0; i < 5; i++) {
-            if (!colored[i]) {
-                grid[row][i].setBackgroundColor(Color.GRAY);
-                updateKeyboardColor(guess.charAt(i), Color.GRAY);
+            int color = Color.GRAY;
+            char letter = guess.charAt(i);
+
+            if (guess.charAt(i) == ANSWER.charAt(i)) {
+                color = Color.GREEN;
+            } else {
+                for (int j = 0; j < 5; j++) {
+                    if (guess.charAt(i) == ANSWER.charAt(j) && !correct[i]) {
+                        color = Color.YELLOW;
+                        break;
+                    }
+                }
             }
+
+            int finalColor = color;
+            int finalI = i;
+            new Handler().postDelayed(() -> {
+                flipTile(grid[row][finalI], letter, finalColor, 0);
+                updateKeyboardColor(letter, finalColor);
+            }, i * 300);
         }
 
-        if (guess.equals(ANSWER)) {
-            Toast.makeText(this, "You guessed it!", Toast.LENGTH_LONG).show();
-            disableAllButtons();
-        } else if (row < 5) {
-            row++;
-            currentGuess.setLength(0);
-        } else {
-            Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
-            disableAllButtons();
+        // Next row or end
+        new Handler().postDelayed(() -> {
+            if (guess.equals(ANSWER)) {
+                Toast.makeText(this, "You guessed it!", Toast.LENGTH_LONG).show();
+                disableAllButtons();
+            } else if (row < 5) {
+                row++;
+                currentGuess.setLength(0);
+            } else {
+                Toast.makeText(this, "Game Over!", Toast.LENGTH_LONG).show();
+                disableAllButtons();
+            }
+        }, 5 * 300 + 300); // after all flips
+    }
+
+    private void flipTile(TextView tile, char letter, int color, int delay) {
+        tile.animate()
+                .rotationY(90)
+                .setDuration(150)
+                .setStartDelay(delay)
+                .withEndAction(() -> {
+                    tile.setText(String.valueOf(letter));
+                    tile.setBackgroundColor(color);
+                    tile.setRotationY(-90);
+                    tile.animate().rotationY(0).setDuration(150).start();
+                })
+                .start();
+    }
+
+    private void shakeRow(int rowIndex) {
+        for (int c = 0; c < 5; c++) {
+            TextView tile = grid[rowIndex][c];
+            tile.animate().translationXBy(10).setDuration(50)
+                    .withEndAction(() -> tile.animate().translationXBy(-20).setDuration(50)
+                            .withEndAction(() -> tile.animate().translationXBy(10).setDuration(50).start())
+                            .start())
+                    .start();
         }
     }
 
@@ -146,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void disableAllButtons() {
         for (Button button : keyboardButtons) {
