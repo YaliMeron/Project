@@ -141,7 +141,14 @@ public class GameLogic {
                 .setStartDelay(delay)
                 .withEndAction(() -> {
                     tile.setText(String.valueOf(letter));
-                    tile.setBackgroundColor(color);
+                    // Set the appropriate drawable based on the color
+                    if (color == Color.GREEN) {
+                        tile.setBackgroundResource(R.drawable.wordle_tile_green);
+                    } else if (color == Color.YELLOW) {
+                        tile.setBackgroundResource(R.drawable.wordle_tile_yellow);
+                    } else {
+                        tile.setBackgroundResource(R.drawable.wordle_tile_gray);
+                    }
                     tile.setRotationY(-90);
                     tile.animate().rotationY(0).setDuration(150).start();
                 })
@@ -162,20 +169,31 @@ public class GameLogic {
     private void updateKeyboardColor(char letter, int newColor) {
         for (Button button : keyboardButtons) {
             if (button != null && button.getText().toString().equals(String.valueOf(letter))) {
+                // Get current background color
                 int currentColor = Color.TRANSPARENT;
                 if (button.getBackground() instanceof ColorDrawable) {
                     currentColor = ((ColorDrawable) button.getBackground()).getColor();
                 }
 
-                // Only update keyboard color if:
+                // Only update if:
                 // 1. Current color is transparent (not set yet)
                 // 2. New color is green (always show green)
                 // 3. Current color is gray and new color is yellow (upgrade to yellow)
                 if (currentColor == Color.TRANSPARENT || 
                     newColor == Color.GREEN || 
                     (currentColor == Color.GRAY && newColor == Color.YELLOW)) {
+                    
+                    // Remove any existing background tint
                     button.setBackgroundTintList(null);
-                    button.setBackgroundColor(newColor);
+                    
+                    // Set the new background color
+                    if (newColor == Color.GREEN) {
+                        button.setBackgroundColor(Color.parseColor("#4CAF50"));
+                    } else if (newColor == Color.YELLOW) {
+                        button.setBackgroundColor(Color.parseColor("#FFC107"));
+                    } else {
+                        button.setBackgroundColor(Color.parseColor("#9E9E9E"));
+                    }
                 }
                 break;
             }
@@ -188,5 +206,22 @@ public class GameLogic {
                 button.setEnabled(false);
             }
         }
+    }
+
+    public void resetGame() {
+        currentGuess.setLength(0);
+        row = 0;
+        answer = null;
+        
+        // Re-enable all keyboard buttons
+        for (Button button : keyboardButtons) {
+            if (button != null) {
+                button.setEnabled(true);
+            }
+        }
+    }
+
+    public String getAnswer() {
+        return answer;
     }
 } 
