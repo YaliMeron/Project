@@ -3,16 +3,13 @@ package com.example.first;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class GameLogic {
     private String answer;
     private StringBuilder currentGuess;
     private int row;
     private TextView[][] grid;
-    private Button[] keyboardButtons;
     private final GameLogicCallback callback;
 
     public interface GameLogicCallback {
@@ -21,26 +18,16 @@ public class GameLogic {
         void onInvalidGuess();
     }
 
-    public GameLogic(TextView[][] grid, Button[] keyboardButtons, GameLogicCallback callback) {
+    public GameLogic(TextView[][] grid, GameLogicCallback callback) {
         this.grid = grid;
-        this.keyboardButtons = keyboardButtons;
         this.callback = callback;
         this.currentGuess = new StringBuilder();
         this.row = 0;
-        initializeKeyboard();
     }
 
     public void setAnswer(String answer) {
         if (answer != null && answer.length() == 5) {
             this.answer = answer.toUpperCase();
-        }
-    }
-
-    private void initializeKeyboard() {
-        String keys = "QWERTYUIOPASDFGHJKLZXCVBNM";
-        for (int i = 0; i < keys.length(); i++) {
-            final int index = i;
-            keyboardButtons[i].setOnClickListener(v -> addLetter(keys.charAt(index)));
         }
     }
 
@@ -118,7 +105,6 @@ public class GameLogic {
             
             new Handler().postDelayed(() -> {
                 flipTile(grid[row][finalI], letter, finalColor, 0);
-                updateKeyboardColor(letter, finalColor);
             }, i * 300);
         }
 
@@ -164,64 +150,5 @@ public class GameLogic {
                             .start())
                     .start();
         }
-    }
-
-    private void updateKeyboardColor(char letter, int newColor) {
-        for (Button button : keyboardButtons) {
-            if (button != null && button.getText().toString().equals(String.valueOf(letter))) {
-                // Get current background color
-                int currentColor = Color.TRANSPARENT;
-                if (button.getBackground() instanceof ColorDrawable) {
-                    currentColor = ((ColorDrawable) button.getBackground()).getColor();
-                }
-
-                // Only update if:
-                // 1. Current color is transparent (not set yet)
-                // 2. New color is green (always show green)
-                // 3. Current color is gray and new color is yellow (upgrade to yellow)
-                if (currentColor == Color.TRANSPARENT || 
-                    newColor == Color.GREEN || 
-                    (currentColor == Color.GRAY && newColor == Color.YELLOW)) {
-                    
-                    // Remove any existing background tint
-                    button.setBackgroundTintList(null);
-                    
-                    // Set the new background color
-                    if (newColor == Color.GREEN) {
-                        button.setBackgroundColor(Color.parseColor("#4CAF50"));
-                    } else if (newColor == Color.YELLOW) {
-                        button.setBackgroundColor(Color.parseColor("#FFC107"));
-                    } else {
-                        button.setBackgroundColor(Color.parseColor("#9E9E9E"));
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    public void disableAllButtons() {
-        for (Button button : keyboardButtons) {
-            if (button != null) {
-                button.setEnabled(false);
-            }
-        }
-    }
-
-    public void resetGame() {
-        currentGuess.setLength(0);
-        row = 0;
-        answer = null;
-        
-        // Re-enable all keyboard buttons
-        for (Button button : keyboardButtons) {
-            if (button != null) {
-                button.setEnabled(true);
-            }
-        }
-    }
-
-    public String getAnswer() {
-        return answer;
     }
 } 

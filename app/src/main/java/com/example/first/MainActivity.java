@@ -1,109 +1,54 @@
 package com.example.first;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class MainActivity extends AppCompatActivity implements GameLogic.GameLogicCallback {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
+import android.content.SharedPreferences;
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends AppCompatActivity implements GameLogic.GameLogicCallback, KeyboardFragment.KeyboardCallback {
     private TextView[][] grid = new TextView[6][5];
-    private Button[] keyboardButtons = new Button[26];
     private GameLogic gameLogic;
     private boolean isGameReady = false;
-    private View statsOverlay;
-    private TextView gamesPlayedText;
-    private TextView winPercentageText;
-    private TextView currentStreakText;
-    private SharedPreferences stats;
-    private FloatingActionButton restartButton;
-    private MaterialButton playAgainButton;
+    private KeyboardFragment keyboardFragment;
+    private String username;
+
+    // Statistics overlay views
+    private View statisticsOverlay;
+    private TextView textGamesPlayed, textWins, textLosses, textWinRate;
+    private Button buttonPlayAgain, buttonReset;
+    private SharedPreferences statsPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        stats = getSharedPreferences("wordle_stats", MODE_PRIVATE);
-        initializeViews();
+        username = getIntent().getStringExtra("username");
+        if (username == null) username = "guest";
+
         initializeGrid();
-        initializeKeyboard();
-        gameLogic = new GameLogic(grid, keyboardButtons, this);
+        initializeKeyboardFragment();
+        initializeStatisticsOverlay();
+        gameLogic = new GameLogic(grid, this);
         disableGameInput();
         fetchNewWord();
+        statsPrefs = getSharedPreferences("game_stats", MODE_PRIVATE);
     }
 
-    private void initializeViews() {
-        statsOverlay = findViewById(R.id.statsOverlay);
-        gamesPlayedText = findViewById(R.id.gamesPlayedText);
-        winPercentageText = findViewById(R.id.winPercentageText);
-        currentStreakText = findViewById(R.id.currentStreakText);
-        restartButton = findViewById(R.id.restartButton);
-        playAgainButton = findViewById(R.id.playAgainButton);
-
-        restartButton.setOnClickListener(v -> restartGame());
-        playAgainButton.setOnClickListener(v -> {
-            statsOverlay.setVisibility(View.GONE);
-            restartGame();
-        });
-    }
-
-    private void restartGame() {
-        // Clear the grid
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                grid[i][j].setText("");
-                grid[i][j].setBackgroundResource(R.drawable.wordle_tile_border);
-            }
-        }
-
-        // Reset keyboard colors
-        for (Button button : keyboardButtons) {
-            if (button != null) {
-                button.setBackgroundResource(R.drawable.keyboard_button_background);
-            }
-        }
-
-        // Reset game logic
-        gameLogic.resetGame();
-        
-        // Fetch new word
-        disableGameInput();
-        fetchNewWord();
-    }
-
-    private void updateStats(boolean won) {
-        int gamesPlayed = stats.getInt("games_played", 0) + 1;
-        int gamesWon = stats.getInt("games_won", 0) + (won ? 1 : 0);
-        int currentStreak = won ? stats.getInt("current_streak", 0) + 1 : 0;
-
-        SharedPreferences.Editor editor = stats.edit();
-        editor.putInt("games_played", gamesPlayed);
-        editor.putInt("games_won", gamesWon);
-        editor.putInt("current_streak", currentStreak);
-        editor.apply();
-
-        // Update UI
-        gamesPlayedText.setText(String.valueOf(gamesPlayed));
-        winPercentageText.setText(String.valueOf((int)((gamesWon * 100.0f) / gamesPlayed)));
-        currentStreakText.setText(String.valueOf(currentStreak));
-    }
-
-    private void showStats(boolean won) {
-        updateStats(won);
-        statsOverlay.setVisibility(View.VISIBLE);
-        statsOverlay.setAlpha(0f);
-        statsOverlay.animate()
-                .alpha(1f)
-                .setDuration(300)
-                .start();
+    private void initializeKeyboardFragment() {
+        keyboardFragment = new KeyboardFragment();
+        keyboardFragment.setCallback(this);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.keyboardContainer, keyboardFragment)
+                .commit();
     }
 
     private void fetchNewWord() {
@@ -136,66 +81,117 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
         }
     }
 
-    private void initializeKeyboard() {
-        String keys = "QWERTYUIOPASDFGHJKLZXCVBNM";
-        for (int i = 0; i < keys.length(); i++) {
-            String buttonId = "btn" + keys.charAt(i);
-            int resId = getResources().getIdentifier(buttonId, "id", getPackageName());
-            keyboardButtons[i] = findViewById(resId);
-        }
-
-        findViewById(R.id.btnEnter).setOnClickListener(v -> {
-            if (isGameReady) {
-                gameLogic.checkWord();
-            }
-        });
-        findViewById(R.id.btnBackspace).setOnClickListener(v -> {
-            if (isGameReady) {
-                gameLogic.removeLetter();
-            }
-        });
-    }
-
     private void enableGameInput() {
-        for (Button button : keyboardButtons) {
-            if (button != null) {
-                button.setEnabled(true);
-            }
+        if (keyboardFragment != null) {
+            keyboardFragment.enableKeyboard();
         }
-        findViewById(R.id.btnEnter).setEnabled(true);
-        findViewById(R.id.btnBackspace).setEnabled(true);
     }
 
     private void disableGameInput() {
-        for (Button button : keyboardButtons) {
-            if (button != null) {
-                button.setEnabled(false);
+        if (keyboardFragment != null) {
+            keyboardFragment.disableKeyboard();
+        }
+    }
+
+    private void initializeStatisticsOverlay() {
+        statisticsOverlay = findViewById(R.id.statisticsOverlay);
+        textGamesPlayed = findViewById(R.id.textGamesPlayed);
+        textWins = findViewById(R.id.textWins);
+        textLosses = findViewById(R.id.textLosses);
+        textWinRate = findViewById(R.id.textWinRate);
+        buttonPlayAgain = findViewById(R.id.buttonPlayAgain);
+        buttonReset = findViewById(R.id.buttonReset);
+
+        statisticsOverlay.setVisibility(View.GONE);
+
+        buttonPlayAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statisticsOverlay.setVisibility(View.GONE);
+                resetGame();
+            }
+        });
+
+        buttonReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetGame();
+            }
+        });
+    }
+
+    private void showStatisticsOverlay(boolean won) {
+        // Update stats per user
+        String prefix = "stats_" + username + "_";
+        int gamesPlayed = statsPrefs.getInt(prefix + "games_played", 0) + 1;
+        int wins = statsPrefs.getInt(prefix + "wins", 0);
+        int losses = statsPrefs.getInt(prefix + "losses", 0);
+        if (won) wins++;
+        else losses++;
+        float winRate = gamesPlayed > 0 ? (wins * 100f / gamesPlayed) : 0f;
+        statsPrefs.edit()
+                .putInt(prefix + "games_played", gamesPlayed)
+                .putInt(prefix + "wins", wins)
+                .putInt(prefix + "losses", losses)
+                .apply();
+        // Update UI
+        textGamesPlayed.setText("Games Played: " + gamesPlayed);
+        textWins.setText("Wins: " + wins);
+        textLosses.setText("Losses: " + losses);
+        textWinRate.setText("Win Rate: " + Math.round(winRate) + "%");
+        statisticsOverlay.setVisibility(View.VISIBLE);
+    }
+
+    private void resetGame() {
+        // Clear grid
+        for (int r = 0; r < 6; r++) {
+            for (int c = 0; c < 5; c++) {
+                grid[r][c].setText("");
+                grid[r][c].setBackgroundResource(R.drawable.wordle_tile_border);
             }
         }
-        findViewById(R.id.btnEnter).setEnabled(false);
-        findViewById(R.id.btnBackspace).setEnabled(false);
+        gameLogic = new GameLogic(grid, this);
+        disableGameInput();
+        fetchNewWord();
+        isGameReady = false;
     }
 
     @Override
     public void onGameWon() {
-        new Handler().postDelayed(() -> {
-            showStats(true);
-            Toast.makeText(this, "Congratulations!", Toast.LENGTH_LONG).show();
-        }, 1500);
-        gameLogic.disableAllButtons();
+        disableGameInput();
+        showStatisticsOverlay(true);
     }
 
     @Override
     public void onGameLost() {
-        new Handler().postDelayed(() -> {
-            showStats(false);
-            Toast.makeText(this, "Game Over! The word was: " + gameLogic.getAnswer(), Toast.LENGTH_LONG).show();
-        }, 1500);
-        gameLogic.disableAllButtons();
+        disableGameInput();
+        showStatisticsOverlay(false);
     }
 
     @Override
     public void onInvalidGuess() {
         Toast.makeText(this, "Enter a 5-letter word", Toast.LENGTH_SHORT).show();
+    }
+
+    // KeyboardFragment.KeyboardCallback implementation
+    @Override
+    public void onKeyPressed(char letter) {
+        if (isGameReady) {
+            gameLogic.addLetter(letter);
+        }
+    }
+
+    @Override
+    public void onEnterPressed() {
+        if (isGameReady) {
+            gameLogic.checkWord();
+        }
+    }
+
+    @Override
+    public void onBackspacePressed() {
+        if (isGameReady) {
+            gameLogic.removeLetter();
+        }
     }
 }

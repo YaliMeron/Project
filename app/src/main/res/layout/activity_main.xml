@@ -5,204 +5,22 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Restart Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/restartButton"
+    <Button
+        android:id="@+id/buttonReset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Reset"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:contentDescription="Restart game"
-        app:backgroundTint="#4CAF50"
-        app:tint="@android:color/white"
-        app:srcCompat="@android:drawable/ic_menu_rotate"/>
-
-    <LinearLayout
-        android:id="@+id/keyboardLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-1dp"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <!-- First Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnQ"
-                style="@style/KeyboardButton"
-                android:text="Q" />
-
-            <Button
-                android:id="@+id/btnW"
-                style="@style/KeyboardButton"
-                android:text="W" />
-
-            <Button
-                android:id="@+id/btnE"
-                style="@style/KeyboardButton"
-                android:text="E" />
-
-            <Button
-                android:id="@+id/btnR"
-                style="@style/KeyboardButton"
-                android:text="R" />
-
-            <Button
-                android:id="@+id/btnT"
-                style="@style/KeyboardButton"
-                android:text="T" />
-
-            <Button
-                android:id="@+id/btnY"
-                style="@style/KeyboardButton"
-                android:text="Y" />
-
-            <Button
-                android:id="@+id/btnU"
-                style="@style/KeyboardButton"
-                android:text="U" />
-
-            <Button
-                android:id="@+id/btnI"
-                style="@style/KeyboardButton"
-                android:text="I" />
-
-            <Button
-                android:id="@+id/btnO"
-                style="@style/KeyboardButton"
-                android:text="O" />
-
-            <Button
-                android:id="@+id/btnP"
-                style="@style/KeyboardButton"
-                android:text="P" />
-        </LinearLayout>
-
-        <!-- Second Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnA"
-                style="@style/KeyboardButton"
-                android:text="A" />
-
-            <Button
-                android:id="@+id/btnS"
-                style="@style/KeyboardButton"
-                android:text="S" />
-
-            <Button
-                android:id="@+id/btnD"
-                style="@style/KeyboardButton"
-                android:text="D" />
-
-            <Button
-                android:id="@+id/btnF"
-                style="@style/KeyboardButton"
-                android:text="F" />
-
-            <Button
-                android:id="@+id/btnG"
-                style="@style/KeyboardButton"
-                android:text="G" />
-
-            <Button
-                android:id="@+id/btnH"
-                style="@style/KeyboardButton"
-                android:text="H" />
-
-            <Button
-                android:id="@+id/btnJ"
-                style="@style/KeyboardButton"
-                android:text="J" />
-
-            <Button
-                android:id="@+id/btnK"
-                style="@style/KeyboardButton"
-                android:text="K" />
-
-            <Button
-                android:id="@+id/btnL"
-                style="@style/KeyboardButton"
-                android:text="L" />
-        </LinearLayout>
-
-        <!-- Third Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnEnter"
-                style="@style/KeyboardButton"
-                android:layout_width="56dp"
-                android:text="ENTER" />
-
-            <Button
-                android:id="@+id/btnZ"
-                style="@style/KeyboardButton"
-                android:text="Z" />
-
-            <Button
-                android:id="@+id/btnX"
-                style="@style/KeyboardButton"
-                android:text="X" />
-
-            <Button
-                android:id="@+id/btnC"
-                style="@style/KeyboardButton"
-                android:text="C" />
-
-            <Button
-                android:id="@+id/btnV"
-                style="@style/KeyboardButton"
-                android:text="V" />
-
-            <Button
-                android:id="@+id/btnB"
-                style="@style/KeyboardButton"
-                android:text="B" />
-
-            <Button
-                android:id="@+id/btnN"
-                style="@style/KeyboardButton"
-                android:text="N" />
-
-            <Button
-                android:id="@+id/btnM"
-                style="@style/KeyboardButton"
-                android:text="M" />
-
-            <Button
-                android:id="@+id/btnBackspace"
-                style="@style/KeyboardButton"
-                android:text="⌫" />
-        </LinearLayout>
-
-    </LinearLayout>
+        android:layout_margin="16dp"/>
 
     <TableLayout
         android:id="@+id/wordleGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_centerInParent="true">
 
         <!-- Rows for Wordle Grid -->
-
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
@@ -214,32 +32,28 @@
 
             <TextView
                 android:id="@+id/tile_01"
-
                 style="@style/WordleTile"
                 android:background="@drawable/wordle_tile_border" />
 
             <TextView
                 android:id="@+id/tile_02"
-
                 style="@style/WordleTile"
                 android:background="@drawable/wordle_tile_border" />
 
             <TextView
                 android:id="@+id/tile_03"
-
                 style="@style/WordleTile"
                 android:background="@drawable/wordle_tile_border" />
 
             <TextView
                 android:id="@+id/tile_04"
-
                 style="@style/WordleTile"
                 android:background="@drawable/wordle_tile_border" />
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tile_10"
@@ -268,8 +82,8 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tile_20"
@@ -298,8 +112,8 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tile_30"
@@ -328,8 +142,8 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tile_40"
@@ -358,8 +172,8 @@
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/tile_50"
@@ -389,126 +203,13 @@
 
     </TableLayout>
 
-    <!-- Stats Overlay -->
-    <RelativeLayout
-        android:id="@+id/statsOverlay"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/keyboardContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#CC000000"
-        android:visibility="gone"
-        android:elevation="10dp">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-1dp" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="#FFFFFF">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="STATISTICS"
-                    android:textColor="#202020"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="24dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="24dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/gamesPlayedText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#202020"
-                            android:textSize="32sp"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Played"
-                            android:textColor="#606060"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/winPercentageText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#202020"
-                            android:textSize="32sp"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Win %"
-                            android:textColor="#606060"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/currentStreakText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#202020"
-                            android:textSize="32sp"
-                            android:textStyle="bold"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Streak"
-                            android:textColor="#606060"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/playAgainButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="PLAY AGAIN"
-                    android:textSize="16sp"
-                    android:padding="12dp"
-                    app:cornerRadius="8dp"
-                    android:backgroundTint="#4CAF50"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
+    <include layout="@layout/statistics_overlay" />
 
 </RelativeLayout>
