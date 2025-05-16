@@ -11,6 +11,7 @@ public class GameLogic {
     private int row;
     private TextView[][] grid;
     private final GameLogicCallback callback;
+    private final KeyboardColorCallback colorCallback;
 
     public interface GameLogicCallback {
         void onGameWon();
@@ -18,9 +19,14 @@ public class GameLogic {
         void onInvalidGuess();
     }
 
-    public GameLogic(TextView[][] grid, GameLogicCallback callback) {
+    public interface KeyboardColorCallback {
+        void updateKeyboardKeyColor(char letter, int color);
+    }
+
+    public GameLogic(TextView[][] grid, GameLogicCallback callback, KeyboardColorCallback colorCallback) {
         this.grid = grid;
         this.callback = callback;
+        this.colorCallback = colorCallback;
         this.currentGuess = new StringBuilder();
         this.row = 0;
     }
@@ -97,14 +103,14 @@ public class GameLogic {
             }
         }
 
-        // Animate the color changes
+        // Animate the color changes and update keyboard
         for (int i = 0; i < 5; i++) {
             int finalColor = colors[i];
             int finalI = i;
             char letter = guess.charAt(i);
-            
             new Handler().postDelayed(() -> {
                 flipTile(grid[row][finalI], letter, finalColor, 0);
+                if (colorCallback != null) colorCallback.updateKeyboardKeyColor(letter, finalColor);
             }, i * 300);
         }
 

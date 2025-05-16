@@ -12,8 +12,17 @@ import androidx.fragment.app.FragmentContainerView;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.view.Gravity;
+import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity implements GameLogic.GameLogicCallback, KeyboardFragment.KeyboardCallback {
+public class MainActivity extends AppCompatActivity implements GameLogic.GameLogicCallback, KeyboardFragment.KeyboardCallback, GameLogic.KeyboardColorCallback {
     private TextView[][] grid = new TextView[6][5];
     private GameLogic gameLogic;
     private boolean isGameReady = false;
@@ -26,10 +35,18 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
     private Button buttonPlayAgain, buttonReset;
     private SharedPreferences statsPrefs;
 
+    private Button buttonSettings;
+    private String[] colorOptions = {"#FFFFFF", "#FFEBEE", "#E3F2FD", "#E8F5E9", "#FFFDE7"};
+    private int selectedColorIndex = 0;
+    private boolean musicOn = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // TEST: Start music service directly to check if music plays
+        startService(new Intent(this, MusicService.class));
 
         username = getIntent().getStringExtra("username");
         if (username == null) username = "guest";
@@ -37,10 +54,34 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
         initializeGrid();
         initializeKeyboardFragment();
         initializeStatisticsOverlay();
-        gameLogic = new GameLogic(grid, this);
+        gameLogic = new GameLogic(grid, this, this);
         disableGameInput();
         fetchNewWord();
         statsPrefs = getSharedPreferences("game_stats", MODE_PRIVATE);
+
+        // Initialize settings button
+        buttonSettings = findViewById(R.id.buttonSettings);
+        loadSettings();
+        applySettings();
+        buttonSettings.setOnClickListener(v -> showSettingsDialog());
+
+        // Initialize reset button
+        Button buttonReset = findViewById(R.id.buttonReset);
+        buttonReset.setOnClickListener(v -> showResetConfirmationDialog());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (musicOn) {
+            startService(new Intent(this, MusicService.class));
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopService(new Intent(this, MusicService.class));
     }
 
     private void initializeKeyboardFragment() {
@@ -52,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
     }
 
     private void fetchNewWord() {
-        WordFetcher.fetchWord(new WordFetcher.WordFetchCallback() {
+        WordFetcher.fetchWord(this, new WordFetcher.WordFetchCallback() {
             @Override
             public void onWordFetched(String word) {
                 gameLogic.setAnswer(word);
@@ -115,9 +156,18 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetGame();
+                showResetConfirmationDialog();
             }
         });
+    }
+
+    private void showResetConfirmationDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle("Reset Game")
+            .setMessage("Are you sure you want to reset the game?")
+            .setPositiveButton("Yes", (dialog, which) -> resetGame())
+            .setNegativeButton("No", null)
+            .show();
     }
 
     private void showStatisticsOverlay(boolean won) {
@@ -150,7 +200,10 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
                 grid[r][c].setBackgroundResource(R.drawable.wordle_tile_border);
             }
         }
-        gameLogic = new GameLogic(grid, this);
+        if (keyboardFragment != null) {
+            keyboardFragment.resetKeyColors();
+            }
+        gameLogic = new GameLogic(grid, this, this);
         disableGameInput();
         fetchNewWord();
         isGameReady = false;
@@ -192,6 +245,66 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
     public void onBackspacePressed() {
         if (isGameReady) {
             gameLogic.removeLetter();
+        }
+    }
+
+    // Add this method to update keyboard key color
+    @Override
+    public void updateKeyboardKeyColor(char letter, int color) {
+        if (keyboardFragment != null) {
+            keyboardFragment.setKeyColor(letter, color);
+        }
+    }
+
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Settings");
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        int padding = (int) (48 * getResources().getDisplayMetrics().density);
+        layout.setPadding(padding, padding, padding, padding);
+
+        // Music switch
+        Switch musicSwitch = new Switch(this);
+        musicSwitch.setText("Background Music");
+        musicSwitch.setTextSize(20);
+        musicSwitch.setChecked(musicOn);
+        
+        // Store initial state
+        final boolean initialMusicState = musicOn;
+        
+        // Only apply changes when OK is pressed
+        musicSwitch.setOnCheckedChangeListener(null); // Remove any existing listener
+        
+        layout.addView(musicSwitch);
+
+        builder.setView(layout);
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            musicOn = musicSwitch.isChecked();
+            saveSettings();
+            applySettings();
+        });
+        builder.setNegativeButton("Cancel", null); // No need to revert since we haven't applied changes
+        builder.show();
+    }
+
+    private void saveSettings() {
+        String prefix = "settings_" + username + "_";
+        statsPrefs.edit()
+                .putBoolean(prefix + "music_on", musicOn)
+                .apply();
+    }
+
+    private void loadSettings() {
+        String prefix = "settings_" + username + "_";
+        musicOn = statsPrefs.getBoolean(prefix + "music_on", true);
+    }
+
+    private void applySettings() {
+        if (musicOn) {
+            startService(new Intent(this, MusicService.class));
+        } else {
+            stopService(new Intent(this, MusicService.class));
         }
     }
 }

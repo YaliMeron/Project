@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.gridlayout)
     implementation("androidx.fragment:fragment:1.6.2")
+    implementation("com.android.volley:volley:1.2.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
