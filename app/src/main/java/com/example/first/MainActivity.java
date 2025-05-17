@@ -21,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.view.Gravity;
 import android.widget.ImageView;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity implements GameLogic.GameLogicCallback, KeyboardFragment.KeyboardCallback, GameLogic.KeyboardColorCallback {
     private TextView[][] grid = new TextView[6][5];
@@ -32,10 +33,11 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
     // Statistics overlay views
     private View statisticsOverlay;
     private TextView textGamesPlayed, textWins, textLosses, textWinRate;
-    private Button buttonPlayAgain, buttonReset;
+    private Button buttonPlayAgain;
+    private ImageButton buttonReset;
     private SharedPreferences statsPrefs;
 
-    private Button buttonSettings;
+    private ImageButton buttonSettings;
     private String[] colorOptions = {"#FFFFFF", "#FFEBEE", "#E3F2FD", "#E8F5E9", "#FFFDE7"};
     private int selectedColorIndex = 0;
     private boolean musicOn = true;
@@ -60,14 +62,20 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
         statsPrefs = getSharedPreferences("game_stats", MODE_PRIVATE);
 
         // Initialize settings button
-        buttonSettings = findViewById(R.id.buttonSettings);
+        ImageButton buttonSettings = findViewById(R.id.buttonSettings);
+        this.buttonSettings = buttonSettings;
         loadSettings();
         applySettings();
         buttonSettings.setOnClickListener(v -> showSettingsDialog());
 
         // Initialize reset button
-        Button buttonReset = findViewById(R.id.buttonReset);
+        ImageButton buttonReset = findViewById(R.id.buttonReset);
+        this.buttonReset = buttonReset;
         buttonReset.setOnClickListener(v -> showResetConfirmationDialog());
+
+        // Initialize statistics button
+        ImageButton buttonStats = findViewById(R.id.buttonStats);
+        buttonStats.setOnClickListener(v -> showStatisticsDialog());
     }
 
     @Override
@@ -141,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
         textLosses = findViewById(R.id.textLosses);
         textWinRate = findViewById(R.id.textWinRate);
         buttonPlayAgain = findViewById(R.id.buttonPlayAgain);
-        buttonReset = findViewById(R.id.buttonReset);
 
         statisticsOverlay.setVisibility(View.GONE);
 
@@ -150,13 +157,6 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
             public void onClick(View v) {
                 statisticsOverlay.setVisibility(View.GONE);
                 resetGame();
-            }
-        });
-
-        buttonReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showResetConfirmationDialog();
             }
         });
     }
@@ -216,14 +216,25 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
     }
 
     @Override
-    public void onGameLost() {
+    public void onGameLost(String answer) {
         disableGameInput();
+        // Update the statistics overlay to show the answer
+        TextView textAnswer = findViewById(R.id.textAnswer);
+        if (textAnswer != null) {
+            textAnswer.setText("The word was: " + answer);
+            textAnswer.setVisibility(View.VISIBLE);
+        }
         showStatisticsOverlay(false);
     }
 
     @Override
     public void onInvalidGuess() {
         Toast.makeText(this, "Enter a 5-letter word", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onInvalidWord() {
+        Toast.makeText(this, "Not a valid English word", Toast.LENGTH_SHORT).show();
     }
 
     // KeyboardFragment.KeyboardCallback implementation
@@ -278,6 +289,33 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
         
         layout.addView(musicSwitch);
 
+        // Spacer View
+        View spacer = new View(this);
+        LinearLayout.LayoutParams spacerParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                (int) (16 * getResources().getDisplayMetrics().density) // 16dp height
+        );
+        spacer.setLayoutParams(spacerParams);
+        layout.addView(spacer);
+
+        // Logout Button
+        Button logoutButton = new Button(this);
+        logoutButton.setText("Logout");
+        logoutButton.setOnClickListener(v -> {
+            // Stop music
+            stopService(new Intent(this, MusicService.class));
+
+            // Clear saved user login
+            SharedPreferences loginPrefs = getSharedPreferences("login_prefs", MODE_PRIVATE);
+            loginPrefs.edit().remove("last_user").apply();
+
+            // Navigate to LoginActivity
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish(); // Close MainActivity
+        });
+        layout.addView(logoutButton);
+
         builder.setView(layout);
         builder.setPositiveButton("OK", (dialog, which) -> {
             musicOn = musicSwitch.isChecked();
@@ -306,5 +344,33 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
         } else {
             stopService(new Intent(this, MusicService.class));
         }
+    }
+
+    private void showStatisticsDialog() {
+        String prefix = "stats_" + username + "_";
+        int gamesPlayed = statsPrefs.getInt(prefix + "games_played", 0);
+        int wins = statsPrefs.getInt(prefix + "wins", 0);
+        int losses = statsPrefs.getInt(prefix + "losses", 0);
+        float winRate = gamesPlayed > 0 ? (wins * 100f / gamesPlayed) : 0f;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Statistics for " + username);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        int padding = (int) (48 * getResources().getDisplayMetrics().density);
+        layout.setPadding(padding, padding, padding, padding);
+
+        TextView statsText = new TextView(this);
+        statsText.setTextSize(18);
+        statsText.setGravity(Gravity.CENTER);
+        statsText.setText(String.format(
+            "Games Played: %d\nWins: %d\nLosses: %d\nWin Rate: %.1f%%",
+            gamesPlayed, wins, losses, winRate
+        ));
+        layout.addView(statsText);
+
+        builder.setView(layout);
+        builder.setPositiveButton("OK", null);
+        builder.show();
     }
 }

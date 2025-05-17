@@ -4,6 +4,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.widget.TextView;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameLogic {
     private String answer;
@@ -12,11 +17,13 @@ public class GameLogic {
     private TextView[][] grid;
     private final GameLogicCallback callback;
     private final KeyboardColorCallback colorCallback;
+    private Set<String> validWords;
 
     public interface GameLogicCallback {
         void onGameWon();
-        void onGameLost();
+        void onGameLost(String answer);
         void onInvalidGuess();
+        void onInvalidWord();
     }
 
     public interface KeyboardColorCallback {
@@ -29,6 +36,22 @@ public class GameLogic {
         this.colorCallback = colorCallback;
         this.currentGuess = new StringBuilder();
         this.row = 0;
+        loadValidWords();
+    }
+
+    private void loadValidWords() {
+        validWords = new HashSet<>();
+        try {
+            InputStream is = grid[0][0].getContext().getResources().openRawResource(R.raw.words);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                validWords.add(line.toUpperCase());
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setAnswer(String answer) {
@@ -70,6 +93,12 @@ public class GameLogic {
         }
 
         String guess = currentGuess.toString().toUpperCase();
+        if (!validWords.contains(guess)) {
+            shakeRow(row);
+            callback.onInvalidWord();
+            return;
+        }
+
         boolean[] correct = new boolean[5];
         boolean[] used = new boolean[5];
         int[] colors = new int[5];
@@ -121,7 +150,7 @@ public class GameLogic {
                 row++;
                 currentGuess.setLength(0);
             } else {
-                callback.onGameLost();
+                callback.onGameLost(answer);
             }
         }, 5 * 300 + 300);
     }

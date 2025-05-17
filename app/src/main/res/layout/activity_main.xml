@@ -6,41 +6,56 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonReset"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:icon="@drawable/baseline_refresh_24"
-        android:iconTint="@android:color/black"
-        android:backgroundTint="#DDDDDD"
-        app:strokeColor="@android:color/darker_gray"
-        app:strokeWidth="2dp"
-        app:cornerRadius="24dp"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="24dp"
-        android:elevation="4dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonSettings"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:icon="@drawable/settings_24dp_1f1f1f_fill0_wght400_grad0_opsz24"
-        android:iconTint="@android:color/black"
-        android:backgroundTint="#DDDDDD"
-        app:strokeColor="@android:color/darker_gray"
-        app:strokeWidth="2dp"
-        app:cornerRadius="24dp"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="24dp"
-        android:elevation="4dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="16dp"/>
+        <ImageButton
+            android:id="@+id/buttonSettings"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/keyboard_button_background"
+            android:src="@drawable/settings_24dp_1f1f1f_fill0_wght400_grad0_opsz24"
+            android:contentDescription="Settings" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/textCurrentUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/buttonStats"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/keyboard_button_background"
+            android:src="@drawable/baseline_bar_chart_24"
+            android:contentDescription="Statistics"
+            android:layout_marginEnd="8dp" />
+
+        <ImageButton
+            android:id="@+id/buttonReset"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/keyboard_button_background"
+            android:src="@drawable/baseline_refresh_24"
+            android:contentDescription="Reset Game" />
+
+    </LinearLayout>
 
     <TableLayout
         android:id="@+id/wordleGrid"
