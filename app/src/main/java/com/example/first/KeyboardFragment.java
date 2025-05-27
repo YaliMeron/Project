@@ -38,9 +38,12 @@ public class KeyboardFragment extends Fragment {
             if (keyboardButtons[i] != null) {
                 final int index = i;  // Create a final copy of the index
                 keyboardButtons[i].setText(String.valueOf(keys.charAt(i)));
-                keyboardButtons[i].setOnClickListener(v -> {
-                    if (callback != null) {
-                        callback.onKeyPressed(keys.charAt(index));
+                keyboardButtons[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (callback != null) {
+                            callback.onKeyPressed(keys.charAt(index));
+                        }
                     }
                 });
             }
@@ -50,9 +53,12 @@ public class KeyboardFragment extends Fragment {
         Button enterButton = view.findViewById(R.id.btnEnter);
         if (enterButton != null) {
             enterButton.setText("ENTER");
-            enterButton.setOnClickListener(v -> {
-                if (callback != null) {
-                    callback.onEnterPressed();
+            enterButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (callback != null) {
+                        callback.onEnterPressed();
+                    }
                 }
             });
         }
@@ -61,9 +67,12 @@ public class KeyboardFragment extends Fragment {
         Button backspaceButton = view.findViewById(R.id.btnBackspace);
         if (backspaceButton != null) {
             backspaceButton.setText("⌫");
-            backspaceButton.setOnClickListener(v -> {
-                if (callback != null) {
-                    callback.onBackspacePressed();
+            backspaceButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (callback != null) {
+                        callback.onBackspacePressed();
+                    }
                 }
             });
         }

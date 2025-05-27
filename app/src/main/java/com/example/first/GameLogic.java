@@ -137,20 +137,26 @@ public class GameLogic {
             int finalColor = colors[i];
             int finalI = i;
             char letter = guess.charAt(i);
-            new Handler().postDelayed(() -> {
-                flipTile(grid[row][finalI], letter, finalColor, 0);
-                if (colorCallback != null) colorCallback.updateKeyboardKeyColor(letter, finalColor);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    flipTile(grid[row][finalI], letter, finalColor, 0);
+                    if (colorCallback != null) colorCallback.updateKeyboardKeyColor(letter, finalColor);
+                }
             }, i * 300);
         }
 
-        new Handler().postDelayed(() -> {
-            if (guess.equals(answer)) {
-                callback.onGameWon();
-            } else if (row < 5) {
-                row++;
-                currentGuess.setLength(0);
-            } else {
-                callback.onGameLost(answer);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (guess.equals(answer)) {
+                    callback.onGameWon();
+                } else if (row < 5) {
+                    row++;
+                    currentGuess.setLength(0);
+                } else {
+                    callback.onGameLost(answer);
+                }
             }
         }, 5 * 300 + 300);
     }

@@ -52,7 +52,12 @@ public class WordFetcher {
                     throw new Exception("Invalid word received: " + word);
                 }
                             Log.d(TAG, "Successfully fetched a word: \"" + word + "\"");
-                handler.post(() -> callback.onWordFetched(word));
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onWordFetched(word);
+                                }
+                            });
             } catch (Exception e) {
                             Log.e(TAG, "Error parsing word: " + e.getMessage(), e);
                             useFallbackWord(handler, callback);

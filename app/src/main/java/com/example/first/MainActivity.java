@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
     private SharedPreferences statsPrefs;
 
     private ImageButton buttonSettings;
-    private String[] colorOptions = {"#FFFFFF", "#FFEBEE", "#E3F2FD", "#E8F5E9", "#FFFDE7"};
-    private int selectedColorIndex = 0;
     private boolean musicOn = true;
 
     @Override
@@ -75,7 +73,12 @@ public class MainActivity extends AppCompatActivity implements GameLogic.GameLog
 
         // Initialize statistics button
         ImageButton buttonStats = findViewById(R.id.buttonStats);
-        buttonStats.setOnClickListener(v -> showStatisticsDialog());
+        buttonStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStatisticsDialog();
+            }
+        });
     }
 
     @Override
