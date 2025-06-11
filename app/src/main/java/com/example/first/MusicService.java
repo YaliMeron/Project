@@ -74,7 +74,7 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
             isPlaying = true;
         }
     }
-
+        //required
     @Override
     public void onAudioFocusChange(int focusChange) {
         switch (focusChange) {
@@ -119,7 +119,7 @@ public class MusicService extends Service implements AudioManager.OnAudioFocusCh
         }
         super.onDestroy();
     }
-
+//required
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
